@@ -80,3 +80,8 @@ sudo sed -i "s|JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64|JAVA_HOME=$JAVA_
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
 sudo systemctl enable tomcat
+
+# Abre el firewall
+ufw allow 8080
+
+echo "Instalación completada, acceder a http://server_domain_or_IP:8080"
