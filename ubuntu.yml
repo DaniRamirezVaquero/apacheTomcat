@@ -215,7 +215,7 @@ Resources:
           ufw allow 8080
 
           # 6. Descargamos nuestro repositorio de GitHub
-          apt-intall git -y
+          apt-install git -y
 
           mkdir /home/tmp
           cd /home/tmp
@@ -227,7 +227,7 @@ Resources:
           ./gradlew war
 
           # 8. Copiamos el war a la carpeta de tomcat
-          cp /app/build/libs/*.war /opt/tomcat/webapps/hola.war
+          mv build/libs/*.war /opt/tomcat/webapps/hola.war
 
           echo "Instalación completada, acceder a http://server_domain_or_IP:8080"
           echo "Para entrar a tu app, accede a http://server_domain_or_IP:8080/hola"
