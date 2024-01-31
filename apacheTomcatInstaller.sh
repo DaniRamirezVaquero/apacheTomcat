@@ -29,16 +29,21 @@ tar xzvf apache-tomcat-10.1.18.tar.gz -C /opt/tomcat --strip-components=1
 chown -R tomcat:tomcat /opt/tomcat
 chmod -R u+x /opt/tomcat/bin
 
+
 #2. Configuramos los usuarios administradores
-# Añadir roles y usuarios a tomcat-users.xml
-sed -i '/<\/tomcat-users>/i \  <role rolename="manager-gui" \/>\n  <user username="manager" password="manager_password" roles="manager-gui" \/>\n  <role rolename="admin-gui" \/>\n  <user username="admin" password="admin_password" roles="manager-gui,admin-gui" \/>' /opt/tomcat/conf/tomcat-users.xml
+echo "Configurando usuarios administrativos..."
+# Buscar "</tomcat-users>" y añadir los usuarios administrativos. (el \ es para escapar el /)
+# El comando sed -i hace los cambios directamente en el archivo y no muestra la salida por pantalla
+sed -i 's/<\/tomcat-users>/  <role rolename="manager-gui" \/>\n  <user username="manager" password="manager_password" roles="manager-gui" \/>\n  <role rolename="admin-gui" \/>\n  <user username="admin" password="admin_password" roles="manager-gui,admin-gui" \/>\n<\/tomcat-users>/' /opt/tomcat/conf/tomcat-users.xml
 
-#Eliminamos la restricciones por defecto
-# Comentar la etiqueta Valve en context.xml
-sed -i '/<Valve className="org.apache.catalina.valves.RemoteAddrValve"/, /allow="127\\.\d+\\.\d+\\.\d+\|::1\|0:0:0:0:0:0:0:1" \/>/ s/^/<!-- /; s/$/ -->/' /opt/tomcat/webapps/manager/META-INF/context.xml
+echo "Configurando acceso a la página del Manager..."
+sed -i '/<Valve/ s/^/<!-- /' /opt/tomcat/webapps/manager/META-INF/context.xml
+sed -i '/:1|0:0:0:0:0:0:0:1" \/>/ s/$/ -->/' /opt/tomcat/webapps/manager/META-INF/context.xml
 
-# Comentar la etiqueta Valve en context.xml de host-manager
-sed -i '/<Valve className="org.apache.catalina.valves.RemoteAddrValve"/, /allow="127\\.\d+\\.\d+\\.\d+\|::1\|0:0:0:0:0:0:0:1" \/>/ s/^/<!-- /; s/$/ -->/' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+echo "Configurando acceso a la página del Host Manager..."
+sed -i '/<Valve/ s/^/<!-- /' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+sed -i '/:1|0:0:0:0:0:0:0:1" \/>/ s/$/ -->/' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+
 
 # 3. Creamos el system service
 # Crear el archivo tomcat.service y añadir el contenido
@@ -70,6 +75,7 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
+#4. Configuramos el JAVA_HOME
 # Obtener la ruta de instalación de Java 1.17.0
 JAVA_PATH=$(sudo update-java-alternatives -l | grep '1.17.0' | awk '{print $3}')
 
@@ -81,6 +87,7 @@ sudo systemctl daemon-reload
 sudo systemctl start tomcat
 sudo systemctl enable tomcat
 
+#5. Configuramos el firewall
 # Abre el firewall
 ufw allow 8080
 
