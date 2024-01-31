@@ -12,7 +12,7 @@ Este script de Bash automatiza la instalación de Apache Tomcat en un sistema Li
 8. Abre el puerto 8080 en el firewall.
 9. Muestra un mensaje indicando que la instalación se ha completado.
 
-## Uso
+## Uso del instalador
 
 1. Descarga el script:
    ```bash
