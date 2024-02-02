@@ -13,7 +13,7 @@ if [ $? -eq 0 ]; then
     PUBLIC_IP=$(aws cloudformation list-exports \
         --query "Exports[?Name=='${STACK_NAME}Instance-PublicIP'].Value" --output text)
 
-    URL="http://$PUBLIC_IP:8080"ls
+    URL="http://$PUBLIC_IP:8080"
 
     echo "--------------------------------------"
     echo "IP: $PUBLIC_IP"

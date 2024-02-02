@@ -9,7 +9,8 @@ cd /home/tmp
 git clone https://github.com/DaniRamirezVaquero/apacheTomcat.git
 
 # 7. Compilamos el proyecto
-cd /apacheTomcat/app
+cd apacheTomcat/app
+sudo chmod +x gradlew
 ./gradlew war
 
 # 8. Copiamos el war a la carpeta de tomcat
